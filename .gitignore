@@ -8,7 +8,8 @@ _obj
 _test
 
 # Architecture specific extensions/prefixes
-
+*.gif
+*/**/main
 *.cgo1.go
 *.cgo2.c
 _cgo_defun.c
