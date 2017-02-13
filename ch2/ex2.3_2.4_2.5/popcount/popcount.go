@@ -25,9 +25,9 @@ func PopCount1(x uint64) int {
 func PopCount2(x uint64) int {
 	// ex2.3
 	c := 0
-	for i := 0; i < 8; i++ {
-		s := byte(x >> uint(i*8))
-		c += int(pc[s])
+	var i uint
+	for i = 0; i < 8; i++ {
+		c += int(pc[byte(x>>(i*8))])
 	}
 	return c
 }
@@ -54,7 +54,7 @@ func PopCount4(x uint64) int {
 	c := 0
 	b := x
 	for {
-		if byte(b&(b-1)) == byte(b-1) {
+		if (b & (b - 1)) == (b - 1) {
 			c++
 		}
 		b = b >> 1
