@@ -51,11 +51,7 @@ func handle(w http.ResponseWriter, r *http.Request) {
 			x := float64(px)/width*(xmax-xmin) + xmin
 			z := complex(x, y)
 			// Image point (px, py) represents complex value z.
-			img.Set(px, py+1, mandelbrot(z))
-			img.Set(px+1, py, mandelbrot(z))
-			img.Set(px+1, py+1, mandelbrot(z))
 			img.Set(px, py, mandelbrot(z))
-
 		}
 	}
 	png.Encode(w, img) // NOTE: ignoring errors
