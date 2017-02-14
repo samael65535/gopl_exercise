@@ -18,9 +18,9 @@ func main() {
 	)
 
 	img := image.NewRGBA(image.Rect(0, 0, width, height))
-	for py := 0; py < height; py+=2 {
+	for py := 0; py < height; py++ {
 		y := float64(py)/height*(ymax-ymin) + ymin
-		for px := 0; px < width; px+=2 {
+		for px := 0; px < width; px++ {
 			x := float64(px)/width*(xmax-xmin) + xmin
 			z := complex(x, y)
 			// Image point (px, py) represents complex value z.
