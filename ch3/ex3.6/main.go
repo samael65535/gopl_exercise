@@ -15,6 +15,9 @@ func main() {
 	const (
 		xmin, ymin, xmax, ymax = -2, -2, +2, +2
 		width, height          = 1024, 1024
+		// 反推出临近像素的x
+		// x = px / width * (xmax - xmin) / width  + xmin
+		// (px-1) / width * (xmax - xmin) / width  + xmin = x + (xmax - xmin) / width
 		epsX                   = (xmax - xmin) / width
 		epsY                   = (ymax - ymin) / height
 	)
