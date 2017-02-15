@@ -5,6 +5,7 @@ var pc [256]byte
 
 func init() {
 	for i := range pc {
+		// 计算有每8位有几个个1
 		pc[i] = pc[i/2] + byte(i&1)
 	}
 }
