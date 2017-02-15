@@ -17,6 +17,10 @@ func comma (s string) string{
 	if (len <= 3) {	return s }
 
 	start := len%3
+	if (len%3==0) {
+		start = 3
+	}
+
 	buf.WriteString(s[:start]);
 	for i:= start; i < len; i+=3 {
 		end := i+3
