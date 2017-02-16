@@ -38,14 +38,17 @@ func clearSpace(b []byte) {
 				j += cSize
 			}
 			len_ := end_- start_
+			// 多余的空格数
 			if len_ > count {
 				count = len_
 			}
-			for j := start_; j < len(b); j++ {
-				if (j+len_ < len(b)) {
-					b[j] = b[j+len_]
-				}
-			}
+			// 优化copy代码
+			copy(b[start_:], b[end_:])
+			// for j := start_; j < len(b); j++ {
+			//	if (j+len_ < len(b)) {
+			//		b[j] = b[j+len_]
+			//	}
+			// }
 		}
 		i += size
 	}
