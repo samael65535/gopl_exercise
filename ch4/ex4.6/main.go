@@ -52,5 +52,5 @@ func clearSpace(b []byte) {
 		}
 		i += size
 	}
-	fmt.Println(string(b[:len(b) - count]),count, len(string(b[:len(b) - count])))
+	fmt.Println(string(b[:len(b) - count]), utf8.RuneCount(b[:len(b) - count]))
 }
