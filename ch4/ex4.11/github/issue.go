@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"bytes"
 	"net/http"
+	"fmt"
 )
 
 // SearchIssues queries the GitHub issue tracker.
@@ -39,10 +40,41 @@ func CreateIssue(issue *Issue) (error){
 	if err != nil {
 		return err
 	}
-
+	fmt.Println(string(data))
 	client := &http.Client{}
 
 	req, errNet := http.NewRequest(http.MethodPost, IssuesURL, bytes.NewReader(data))
+	defer req.Body.Close()
+	if errNet != nil {
+		return errNet
+	}
+	req.Header.Set("Content-Type", "application/json");
+	req.SetBasicAuth(USERNAME, PASSWORD)
+	_, err = client.Do(req)
+	
+	if errNet != nil {
+		return errNet
+	}
+	return nil
+}
+
+func LoadIssue(id uint64) {
+
+}
+
+func CloseIssue(id string) (error){
+	issue := Issue{
+		State: "closed",
+	}
+	data, err :=  json.Marshal(issue)
+	if err != nil {
+		return err
+	}
+	fmt.Println(string(data))
+	client := &http.Client{}
+	fmt.Println(IssuesURL + id)
+	req, errNet := http.NewRequest(http.MethodPost, IssuesURL + id, bytes.NewReader(data))
+	defer req.Body.Close()
 	if errNet != nil {
 		return errNet
 	}
@@ -53,18 +85,11 @@ func CreateIssue(issue *Issue) (error){
 	if errNet != nil {
 		return errNet
 	}
+	fmt.Println(req.Body.Text())
 	return nil
 }
 
-func LoadIssues(id uint64) {
-
-}
-
-func CloseIssues(id uint64) (bool){
-	return false
-}
-
-func EditIssues(title string, body string, id uint64) {
+func EditIssue(title string, body string, id uint64) {
 
 }
 
