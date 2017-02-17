@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"./github"
 	"bufio"
-	"strconv"
 	"os"
 	"golang.org/x/crypto/ssh/terminal"
 	"os/exec"
 	"log"
 	"io/ioutil"
+	"encoding/json"
 )
 // 只能在*nix系统运行
 
@@ -27,6 +27,7 @@ func main() {
 		body, err := getIssueBodyByEditor()
 		if err != nil {
 			log.Fatal(err)
+			return
 		}
 		issue := github.Issue{
 			Title: title,
@@ -36,18 +37,45 @@ func main() {
 		}
 		err = github.CreateIssue(&issue)
 		if err != nil {
-			fmt.Println(err.Error())
+			log.Fatal(err)
+			return
 		}
 	case "close":
 		err := github.CloseIssue(os.Args[2])
 		if err != nil {
-			fmt.Println(err.Error())
-
+			log.Fatal(err)
+			return
 		}
 	case "edit":
-		strconv.ParseBool("false");
+		id := os.Args[2]
+		title := ""
+		if len(os.Args) == 4 {
+			title = os.Args[3]
+		}
+		body, err := getIssueBodyByEditor()
+		if err != nil {
+			log.Fatal(err)
+			return
+		}
+		err = github.EditIssue(title, string(*body), id)
+		if err != nil {
+			log.Fatal(err)
+			return
+		}
+
 	case "load":
-		github.LoadIssue(1)
+		fmt.Println("hello")
+		result, err := github.LoadIssue(os.Args[2]);
+		if err != nil {
+			fmt.Println(err.Error())
+			return
+		}
+		b, err := json.MarshalIndent(*result, "", "  ")
+		if; err!= nil{
+			fmt.Println(err.Error())
+			return
+		}
+		fmt.Println(string(b))
 	}
 }
 

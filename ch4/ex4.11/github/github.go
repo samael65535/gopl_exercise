@@ -3,12 +3,14 @@
 package github
 
 
-const IssuesURL = "https://api.github.com/repos/samael65535/gopl_exercise/issues"
+const IssuesURL = "https://api.github.com/repos/samael65535/gopl_exercise/issues/"
 
 type Issue struct {
-	Id        int `json:"id,omitempty"`
-	Title     string `json:"title"`
-	Body      string `json:body,omitempty`
+	Id        uint64 `json:"id,omitempty"`
+	Title     string `json:"title,omitempty"`
+	Body      string `json:"body,omitempty"`
+	State     string `json:"state,omitempty"`
+	Labels    []string `json:"labels,omitempty"`
 }
 
 var USERNAME string
