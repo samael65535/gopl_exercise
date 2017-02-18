@@ -19,4 +19,3 @@ func wordCount(s string) int {
 	return count
 
 }
-http://duotai:pTHVsfXVq@rosewood.h.xduotai.com:20332
