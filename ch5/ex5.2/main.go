@@ -46,7 +46,7 @@ func visit(n *html.Node, counter map[string]int) map[string]int {
 }
 
 func find(urlList []string) (*[][]byte, error) {
-	list := [][]byte{{}}
+	list := [][]byte{}
 	for _, url := range urlList {
 		resp, err := http.Get(url)
 		if err != nil {
