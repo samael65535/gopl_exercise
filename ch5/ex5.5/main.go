@@ -1,5 +1,6 @@
 package main
 
+// 实现countWordsAndImages。（参考练习4.9如何分词）
 import (
 	"bufio"
 	"bytes"
