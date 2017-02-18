@@ -34,13 +34,15 @@ func visit(n *html.Node) {
 		return
 	}
 
-	if n.Type == html.ElementNode && (n.Data == "script" || n.Data == "sytle") {
+	if n.Type == html.ElementNode && (n.Data == "script" || n.Data == "style") {
 		return
 	}
-	visit(n.FirstChild)
 	if n.Type == html.TextNode {
 		fmt.Println(n.Data)
 	}
+
+	visit(n.FirstChild)
+
 	visit(n.NextSibling)
 }
 
