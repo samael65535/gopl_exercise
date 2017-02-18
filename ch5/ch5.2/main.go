@@ -1,5 +1,6 @@
 package main
 
+// 编写函数，记录在HTML树中出现的同名元素的次数。
 import (
 	"bytes"
 	"fmt"
@@ -11,7 +12,8 @@ import (
 )
 
 func main() {
-	list, err := find(os.Args[1:])
+	//list, err := find(os.Args[1:])
+	list, err := find([]string{"http://www.baidu.com"})
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
 		os.Exit(1)
@@ -22,30 +24,26 @@ func main() {
 			fmt.Fprintf(os.Stderr, "findlinks1: %v\n", err)
 			os.Exit(1)
 		}
-		for _, link := range visit(nil, doc) {
-			fmt.Println(link)
+		counter := make(map[string]int)
+		for k, v := range visit(doc, counter) {
+			fmt.Println(k, v)
 		}
 	}
 
 }
 
-// visit appends to links each link found in n and returns the result.
-func visit(links []string, n *html.Node) []string {
+func visit(n *html.Node, counter map[string]int) map[string]int {
 	if n == nil {
-		return links
+		return counter
 	}
 
-	links = visit(links, n.FirstChild)
-	if n.Type == html.ElementNode && n.Data == "a" {
-		for _, a := range n.Attr {
-			if a.Key == "href" {
-				links = append(links, a.Val)
-			}
-		}
-	}
-	links = visit(links, n.NextSibling)
+	visit(n.FirstChild, counter)
 
-	return links
+	if n.Type == html.ElementNode {
+		counter[n.Data]++
+	}
+	visit(n.NextSibling, counter)
+	return counter
 }
 
 func find(urlList []string) (*[][]byte, error) {
