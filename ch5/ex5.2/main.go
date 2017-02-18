@@ -37,11 +37,10 @@ func visit(n *html.Node, counter map[string]int) map[string]int {
 		return counter
 	}
 
-	visit(n.FirstChild, counter)
-
 	if n.Type == html.ElementNode {
 		counter[n.Data]++
 	}
+	visit(n.FirstChild, counter)
 	visit(n.NextSibling, counter)
 	return counter
 }
