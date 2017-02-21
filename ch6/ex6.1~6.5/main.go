@@ -1,15 +1,6 @@
 package main
 
 /*
-练习6.1: 为bit数组实现下面这些方法
-
-func (*IntSet) Len() int      // return the number of elements
-func (*IntSet) Remove(x int)  // remove x from the set
-func (*IntSet) Clear()        // remove all elements from the set
-func (*IntSet) Copy() *IntSet // return a copy of the set
-
-练习 6.2：定义一个变参方法(*IntSet).AddAll(...int)，这个方法可以为一组IntSet值求和，比如s.AddAll(1,2,3)。
-
 练习 6.3：(*IntSet).UnionWith会用|操作符计算两个集合的交集，我们再为IntSet实现另外的几个函数
 IntersectWith(交集：元素在A集合B集合均出现),
 DifferenceWith(差集：元素出现在A集合，未出现在B集合),
@@ -88,6 +79,15 @@ func (s *IntSet) String() string {
 	buf.WriteByte('}')
 	return buf.String()
 }
+
+/*
+练习6.1: 为bit数组实现下面这些方法
+
+func (*IntSet) Len() int      // return the number of elements
+func (*IntSet) Remove(x int)  // remove x from the set
+func (*IntSet) Clear()        // remove all elements from the set
+func (*IntSet) Copy() *IntSet // return a copy of the set
+*/
 func (s *IntSet) Len() int { // return the number of elements
 	count := 0
 	for _, x := range s.words {
@@ -127,6 +127,16 @@ func (s *IntSet) Copy() *IntSet { // return a copy of the set
 	return &res
 }
 
+/*
+练习 6.2：定义一个变参方法(*IntSet).AddAll(...int)，这个方法可以为一组IntSet值求和(翻译问题吧?)，比如s.AddAll(1,2,3)。
+*/
+
+func (s *IntSet)AddAll(nums ...int) {
+	for _, n := range nums {
+		s.Add(n)
+	}
+}
+
 func main() {
 	var x, y IntSet
 	var z *IntSet
@@ -148,10 +158,9 @@ func main() {
 	fmt.Println(x.String())
 	fmt.Println(z.String())
 	fmt.Println(x.Has(9), x.Has(123))
-
+	
 	fmt.Println(x.Len())
 
-	//for k, v := range pc {
-	//	fmt.Println(k, v)
-	//}
+	y.AddAll(1,1,2,3,5,8,13,21)
+	fmt.Println(y.String())
 }
