@@ -145,13 +145,20 @@ SymmetricDifference(并差集：元素出现在A但没有出现在B，或者出�
 */
 
 func (s *IntSet) IntersectWith(t *IntSet) {
-	for i := range s.words {
-		s.words[i] = s.words[i] & t.words[i]
+	l := len(t.words)
+	for i,_ := range s.words {
+		if i < l {
+			s.words[i] = s.words[i] & t.words[i]
+		} else {
+			s.words[i] = 0
+		}
 	}
 }
 
 func (s *IntSet) DifferenceWith(t *IntSet) {
-
+	for i := range s.words {
+		s.words[i] = s.words[i] & t.words[i]
+	}
 }
 
 func (s *IntSet) SymmetricDifference(t *IntSet) {
@@ -181,8 +188,8 @@ func main() {
 	fmt.Println(x.Has(9), x.Has(123))
 	
 	fmt.Println(x.Len())
-
-	y.AddAll(1,1,2,3,5,8,13,21)
+	z.Clear()
+	y.AddAll(1,1,2,3,5,8,13,21, 2112)
 	fmt.Println(z.String())
 	y.IntersectWith(z)
 	fmt.Print(y.String())
