@@ -141,7 +141,7 @@ func (s *IntSet)AddAll(nums ...int) {
 我们再为IntSet实现另外的几个函数
 IntersectWith(交集：元素在A集合B集合均出现),  A & B
 DifferenceWith(差集：元素出现在A集合，未出现在B集合), A - B = A ^ (A & B)
-SymmetricDifference(并差集：元素出现在A但没有出现在B，或者出现在B没有出现在A)。
+SymmetricDifference(并差集：元素出现在A但没有出现在B，或者出现在B没有出现在A)。  (A-B) | (B-A)
 */
 
 func (s *IntSet) IntersectWith(t *IntSet) {
@@ -165,6 +165,12 @@ func (s *IntSet) DifferenceWith(t *IntSet) {
 }
 
 func (s *IntSet) SymmetricDifference(t *IntSet) {
+	l := len(t.words)
+	for i,_ := range s.words {
+		if i < l {
+			s.words[i] = (s.words[i] ^ (s.words[i] & t.words[i])) | (t.words[i] ^ (s.words[i] & t.words[i]))
+		}
+	}
 
 }
 
@@ -189,14 +195,17 @@ func main() {
 	fmt.Println(x.String())
 	fmt.Println(z.String())
 	fmt.Println(x.Has(9), x.Has(123))
-	
+
 	fmt.Println(x.Len())
 	y.AddAll(1,1,2,3,5,8,13,21, 2112)
+	z.AddAll(1,1,2,3,5,8)
 	fmt.Println(z.String())
-	y.IntersectWith(z)
-	fmt.Print(y.String())
+//	y.IntersectWith(z)
+	fmt.Println(y.String())
 
-
-	y.DifferenceWith(z)
+	fmt.Println("---------")
+	fmt.Println(z.String())
+	fmt.Println(y.String())
+	y.SymmetricDifference(z)
 	fmt.Print(y.String())
 }
