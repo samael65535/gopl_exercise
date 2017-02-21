@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"./intset"
+	"fmt"
 )
 
 func main() {
@@ -28,10 +28,10 @@ func main() {
 	fmt.Println(x.Has(9), x.Has(123))
 
 	fmt.Println(x.Len())
-	y.AddAll(1,1,2,3,5,8,13,21, 2112)
-	z.AddAll(1,1,2,3,5,8)
+	y.AddAll(1, 1, 2, 3, 5, 8, 13, 21, 2112)
+	z.AddAll(1, 1, 2, 3, 5, 8)
 	fmt.Println(z.String())
-//	y.IntersectWith(z)
+	//	y.IntersectWith(z)
 	fmt.Println(y.String())
 
 	fmt.Println("---------")
