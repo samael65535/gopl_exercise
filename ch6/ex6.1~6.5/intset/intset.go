@@ -1,20 +1,16 @@
 package intset
-/*
-练习 6.5： 我们这章定义的IntSet里的每个字都是用的uint64类型，但是64位的数值可能在32位的平台上不高效。
-修改程序，使其使用uint类型，这种类型对于32位平台来说更合适。当然了，这里我们可以不用简单粗暴地除64，
-可以定义一个常量来决定是用32还是64，这里你可能会用到平台的自动判断的一个智能表达式：32 << (^uint(0) >> 63)
-*/
+
 import (
 	"bytes"
 	"fmt"
 )
 
-var pc []uint64
+var pc []uint
 
 func init() {
-	var i uint64
-	pc = make([]uint64, 64, 64)
-	for i = 0; i < 64; i++ {
+	var i uint
+	pc = make([]uint, wordSize, wordSize)
+	for i = 0; i < wordSize; i++ {
 		pc[i] = pc[i/2] + (i % 2)
 	}
 }
@@ -22,18 +18,18 @@ func init() {
 // An IntSet is a set of small non-negative integers.
 // Its zero value represents the empty set.
 type IntSet struct {
-	words []uint64
+	words []uint
 }
 
 // Has reports whether the set contains the non-negative value x.
 func (s *IntSet) Has(x int) bool {
-	word, bit := x/64, uint(x%64)
+	word, bit := x/wordSize, uint(x%wordSize)
 	return word < len(s.words) && s.words[word]&(1<<bit) != 0
 }
 
 // Add adds the non-negative value x to the set.
 func (s *IntSet) Add(x int) {
-	word, bit := x/64, uint(x%64)
+	word, bit := x/wordSize, uint(x%wordSize)
 	for word >= len(s.words) {
 		s.words = append(s.words, 0)
 	}
@@ -59,7 +55,7 @@ func (s *IntSet) String() string {
 		if word == 0 {
 			continue
 		}
-		for j := 0; j < 64; j++ {
+		for j := 0; j < wordSize; j++ {
 			if word&(1<<uint(j)) != 0 {
 				if buf.Len() > len("{") {
 					buf.WriteByte(' ')
@@ -80,18 +76,14 @@ func (*IntSet) Remove(x int)  // remove x from the set
 func (*IntSet) Clear()        // remove all elements from the set
 func (*IntSet) Copy() *IntSet // return a copy of the set
 */
-func (s *IntSet) Len() int { // return the number of elements
-	count := 0
+func (s *IntSet) Len() uint { // return the number of elements
+	var count uint
 	for _, x := range s.words {
 		//fmt.Println(word)
-		c := int(pc[byte(x>>(0*8))] +
-			pc[byte(x>>(1*8))] +
-			pc[byte(x>>(2*8))] +
-			pc[byte(x>>(3*8))] +
-			pc[byte(x>>(4*8))] +
-			pc[byte(x>>(5*8))] +
-			pc[byte(x>>(6*8))] +
-			pc[byte(x>>(7*8))])
+		var c uint
+		for i := 0; i < wordSize; i++ {
+			c += pc[byte(x>>uint(i*8))]
+		}
 		count += c
 	}
 	return count
@@ -99,7 +91,7 @@ func (s *IntSet) Len() int { // return the number of elements
 
 func (s *IntSet) Remove(x int) { // remove x from the set
 	if s.Has(x) {
-		word, bit := x/64, uint(x%64)
+		word, bit := x/wordSize, uint(x%wordSize)
 		s.words[word] ^= 1 << bit
 	}
 
@@ -186,3 +178,12 @@ func (s *IntSet) Elems() []uint64{
 	}
 	return res
 }
+
+
+/*
+练习 6.5： 我们这章定义的IntSet里的每个字都是用的uint64类型，但是64位的数值可能在32位的平台上不高效。
+修改程序，使其使用uint类型，这种类型对于32位平台来说更合适。当然了，这里我们可以不用简单粗暴地除64，
+可以定义一个常量来决定是用32还是64，这里你可能会用到平台的自动判断的一个智能表达式：32 << (^uint(0) >> 63)
+*/
+
+ const wordSize = 32 << (^uint(0) >> 63)

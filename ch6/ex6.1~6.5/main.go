@@ -41,4 +41,5 @@ func main() {
 	fmt.Println(y.String())
 
 	fmt.Println(y.Elems())
+	fmt.Println(32 << (^uint(0) >> 63))
 }
