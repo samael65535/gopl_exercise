@@ -1,10 +1,7 @@
 package main
 
 /*
-练习 6.3：(*IntSet).UnionWith会用|操作符计算两个集合的交集，我们再为IntSet实现另外的几个函数
-IntersectWith(交集：元素在A集合B集合均出现),
-DifferenceWith(差集：元素出现在A集合，未出现在B集合),
-SymmetricDifference(并差集：元素出现在A但没有出现在B，或者出现在B没有出现在A)。
+
 
 练习6.4: 实现一个Elems方法，返回集合中的所有元素，用于做一些range之类的遍历操作。
 
@@ -128,13 +125,37 @@ func (s *IntSet) Copy() *IntSet { // return a copy of the set
 }
 
 /*
-练习 6.2：定义一个变参方法(*IntSet).AddAll(...int)，这个方法可以为一组IntSet值求和(翻译问题吧?)，比如s.AddAll(1,2,3)。
+练习 6.2：
+定义一个变参方法(*IntSet).AddAll(...int)，这个方法可以为一组IntSet值求和(翻译问题吧?)，比如s.AddAll(1,2,3)。
 */
 
 func (s *IntSet)AddAll(nums ...int) {
 	for _, n := range nums {
 		s.Add(n)
 	}
+}
+
+/*
+练习 6.3：
+(*IntSet).UnionWith会用|操作符计算两个集合的并集，
+我们再为IntSet实现另外的几个函数
+IntersectWith(交集：元素在A集合B集合均出现),
+DifferenceWith(差集：元素出现在A集合，未出现在B集合),
+SymmetricDifference(并差集：元素出现在A但没有出现在B，或者出现在B没有出现在A)。
+*/
+
+func (s *IntSet) IntersectWith(t *IntSet) {
+	for i := range s.words {
+		s.words[i] = s.words[i] & t.words[i]
+	}
+}
+
+func (s *IntSet) DifferenceWith(t *IntSet) {
+
+}
+
+func (s *IntSet) SymmetricDifference(t *IntSet) {
+
 }
 
 func main() {
@@ -162,5 +183,7 @@ func main() {
 	fmt.Println(x.Len())
 
 	y.AddAll(1,1,2,3,5,8,13,21)
-	fmt.Println(y.String())
+	fmt.Println(z.String())
+	y.IntersectWith(z)
+	fmt.Print(y.String())
 }
