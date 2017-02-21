@@ -38,5 +38,7 @@ func main() {
 	fmt.Println(z.String())
 	fmt.Println(y.String())
 	y.SymmetricDifference(z)
-	fmt.Print(y.String())
+	fmt.Println(y.String())
+
+	fmt.Println(y.Elems())
 }

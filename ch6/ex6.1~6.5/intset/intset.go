@@ -172,3 +172,17 @@ func (s *IntSet) SymmetricDifference(t *IntSet) {
 /*
 练习6.4: 实现一个Elems方法，返回集合中的所有元素，用于做一些range之类的遍历操作。
 */
+func (s *IntSet) Elems() []uint64{
+	res := []uint64{}
+	for i, word := range s.words {
+		if word == 0 {
+			continue
+		}
+		for j := 0; j < 64; j++ {
+			if word&(1<<uint(j)) != 0 {
+				res = append(res, uint64(64*i+j))
+			}
+		}
+	}
+	return res
+}
