@@ -13,11 +13,11 @@ const (
 )
 
 func (c Celsius) String() string {
-	return fmt.Sprintf("%gC", c)
+	return fmt.Sprintf("%g°C", c)
 }
 
 func (f Fahrenheit) String() string {
-	return fmt.Sprintf("%gF", f)
+	return fmt.Sprintf("%g°F", f)
 }
 
 func (k Kelvin) String() string {
