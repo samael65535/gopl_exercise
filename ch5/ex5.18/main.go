@@ -1,13 +1,17 @@
 package main
 
 import (
-	"path"
+	"fmt"
+	"io"
 	"net/http"
 	"os"
-	"io"
-	"fmt"
+	"path"
 )
-// 不修改fetch的行为，重写fetch函数，要求使用defer机制关闭文件。
+
+/*
+练习5.18
+不修改fetch的行为，重写fetch函数，要求使用defer机制关闭文件。
+*/
 
 // Fetch downloads the URL and returns the
 // name and length of the local file.
@@ -36,7 +40,6 @@ func fetch(url string) (filename string, n int64, err error) {
 	}()
 	return local, n, err
 }
-
 
 func main() {
 	fetch("http://www.ituring.com.cn/index.html")

@@ -3,9 +3,11 @@ package main
 import (
 	"fmt"
 )
+
 /*
- 使用breadthFirst遍历其他数据结构。
- 比如，topoSort例子中的课程依赖关系（有向图）,个人计算机的文件层次结构（树），你所在城市的公交或地铁线路（无向图）。
+练习5.14:
+使用breadthFirst遍历其他数据结构。
+比如，topoSort例子中的课程依赖关系（有向图）,个人计算机的文件层次结构（树），你所在城市的公交或地铁线路（无向图）。
 */
 // prereqs记录了每个课程的前置课程
 var prereqs = map[string][]string{
@@ -29,6 +31,7 @@ var prereqs = map[string][]string{
 // Any items returned by f are added to the worklist.
 // f is called at most once for each item.
 var classMap = map[string][]string{}
+
 func breadthFirst(f func(item []string) []string, worklist []string, k string) {
 	seen := make(map[string]bool)
 

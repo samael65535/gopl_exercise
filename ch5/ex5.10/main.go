@@ -2,7 +2,10 @@ package main
 
 import "fmt"
 
-// 重写topoSort函数，用map代替切片并移除对key的排序代码。验证结果的正确性（结果不唯一）。
+/*
+练习5.10:
+重写topoSort函数，用map代替切片并移除对key的排序代码。验证结果的正确性（结果不唯一）。
+*/
 
 // prereqs记录了每个课程的前置课程
 var prereqs = map[string][]string{

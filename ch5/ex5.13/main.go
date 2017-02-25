@@ -1,18 +1,21 @@
 package main
+
 /*
+练习5.13:
 修改crawl，使其能保存发现的页面，必要时，可以创建目录来保存这些页面。
 只保存来自原始域名下的页面。假设初始页面在golang.org下，就不要保存vimeo.com下的页面。
 */
 import (
 	"fmt"
-	"log"
-	"./links"
-	"net/url"
-	"net/http"
 	"io/ioutil"
+	"log"
+	"net/http"
+	"net/url"
 
-	"strings"
+	"./links"
+
 	"os"
+	"strings"
 )
 
 // breadthFirst calls f for each item in the worklist.
@@ -22,9 +25,9 @@ func breadthFirst(f func(item string, hosts map[string]bool) []string, worklist 
 	seen := make(map[string]bool)
 	hosts := make(map[string]bool)
 	for _, k := range worklist {
-		s,_ := url.Parse(k)
-		hosts[s.Host] = true;
-		_ = os.Mkdir(BasePath+ s.Host, 0755)
+		s, _ := url.Parse(k)
+		hosts[s.Host] = true
+		_ = os.Mkdir(BasePath+s.Host, 0755)
 	}
 	for len(worklist) > 0 {
 		items := worklist
@@ -39,6 +42,7 @@ func breadthFirst(f func(item string, hosts map[string]bool) []string, worklist 
 }
 
 const BasePath = "./output/"
+
 func crawl(u string, hosts map[string]bool) []string {
 	currentURL, e := url.Parse(u)
 	if !hosts[currentURL.Host] {
@@ -51,7 +55,7 @@ func crawl(u string, hosts map[string]bool) []string {
 		return list
 	}
 
-	if hosts[currentURL.Host] && e == nil && currentURL.Path != ""{
+	if hosts[currentURL.Host] && e == nil && currentURL.Path != "" {
 		resp, err := http.Get(u)
 		if err != nil {
 			resp.Body.Close()

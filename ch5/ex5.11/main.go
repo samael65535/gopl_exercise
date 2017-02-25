@@ -3,7 +3,10 @@ package main
 import "fmt"
 import "os"
 
-// 重写topoSort函数，用map代替切片并移除对key的排序代码。验证结果的正确性（结果不唯一）。
+/*
+练习5.11
+重写topoSort函数，用map代替切片并移除对key的排序代码。验证结果的正确性（结果不唯一）。
+*/
 
 // prereqs记录了每个课程的前置课程
 var prereqs = map[string][]string{
@@ -31,12 +34,12 @@ func main() {
 		fmt.Println(err.Error())
 		os.Exit(1)
 	}
-	for i, course := range slice  {
+	for i, course := range slice {
 		fmt.Printf("%d:\t%s\n", i+1, course)
 	}
 }
 
-func topoSort(m map[string][]string) ([]string, error){
+func topoSort(m map[string][]string) ([]string, error) {
 	var order []string
 	seen := make(map[string]bool)
 	for k := range m {

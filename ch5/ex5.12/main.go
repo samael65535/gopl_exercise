@@ -1,5 +1,7 @@
 package main
+
 /*
+练习5.12:
 gopl.io/ch5/outline2（5.5节）的startElement和endElement共用了全局变量depth，
 将它们修改为匿名函数，使其共享outline中的局部变量。
 */
@@ -12,12 +14,13 @@ import (
 
 	"golang.org/x/net/html"
 )
+
 // forEachNode针对每个结点x,都会调用pre(x)和post(x)。
 // pre和post都是可选的。
 // 遍历孩子结点之前,pre被调用
 // 遍历孩子结点之后，post被调用
 func forEachNode(n *html.Node, pre, post func(n *html.Node), depth int) {
-	if (pre != nil) {
+	if pre != nil {
 		pre(n)
 	}
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
@@ -25,14 +28,14 @@ func forEachNode(n *html.Node, pre, post func(n *html.Node), depth int) {
 			if n.Type == html.ElementNode {
 				fmt.Printf("%*s<%s>\n", depth*2, "", n.Data)
 			}
-		}, func (n *html.Node) {
+		}, func(n *html.Node) {
 			if n.Type == html.ElementNode {
 				fmt.Printf("%*s</%s>\n", depth*2, "", n.Data)
 			}
 		}, depth+1)
 	}
 
-	if (post != nil) {
+	if post != nil {
 		post(n)
 	}
 }
@@ -54,7 +57,6 @@ func find(urlList []string) (*[][]byte, error) {
 	}
 	return &list, nil
 }
-
 
 func main() {
 	//list, err := find(os.Args[1:])

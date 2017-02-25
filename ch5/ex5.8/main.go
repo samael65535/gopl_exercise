@@ -11,13 +11,14 @@ import (
 )
 
 /*
+练习5.8:
 改pre和post函数，使其返回布尔类型的返回值。返回false时，中止forEachNode的遍历。
 使用修改后的代码编写ElementByID函数，根据用户输入的id查找第一个拥有该id元素的HTML元素，查找成功后，停止遍历。
 */
-func pre(id string, n *html.Node) bool{
+func pre(id string, n *html.Node) bool {
 	if n.Type == html.ElementNode {
 		for _, a := range n.Attr {
-			if a.Key == "id"  && a.Val == id {
+			if a.Key == "id" && a.Val == id {
 				fmt.Println(a.Key, a.Val, n.Data)
 				return true
 			}
@@ -27,7 +28,6 @@ func pre(id string, n *html.Node) bool{
 	return false
 }
 
-
 func ElementByID(id string, n *html.Node, pre, post func(id string, n *html.Node) bool) {
 	if n != nil && pre(id, n) {
 		return
@@ -36,7 +36,7 @@ func ElementByID(id string, n *html.Node, pre, post func(id string, n *html.Node
 	for c := n.FirstChild; c != nil; c = c.NextSibling {
 		ElementByID(id, c, pre, post)
 	}
-	if n != nil && post != nil{
+	if n != nil && post != nil {
 		post(id, n)
 	}
 }
@@ -58,7 +58,6 @@ func find(urlList []string) (*[][]byte, error) {
 	}
 	return &list, nil
 }
-
 
 func main() {
 	//list, err := find(os.Args[1:])

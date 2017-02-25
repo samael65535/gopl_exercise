@@ -1,7 +1,10 @@
-// Surface computes an SVG rendering of a 3-D surface function.
-//  修改gopl.io/ch3/surface (§3.2) 中的corner函数，将返回值命名，并使用bare return。
 package main
 
+/*
+练习5.6
+Surface computes an SVG rendering of a 3-D surface function.
+修改gopl.io/ch3/surface (§3.2) 中的corner函数，将返回值命名，并使用bare return。
+*/
 import (
 	"fmt"
 	"math"
