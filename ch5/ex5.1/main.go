@@ -1,5 +1,9 @@
 package main
 
+/*
+练习 5.1：
+修改findlinks代码中遍历n.FirstChild链表的部分，将循环调用visit，改成递归调用。
+*/
 import (
 	"bytes"
 	"fmt"
