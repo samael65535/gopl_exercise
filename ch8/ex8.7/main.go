@@ -139,7 +139,7 @@ func replaceLink(n *html.Node, depth int, currentURL *url.URL) {
 				if err != nil {
 					continue
 				}
-				n.Attr[i].Val = "./" + strings.Repeat("../", depth) + link.Path + "/index.html"
+				n.Attr[i].Val = "./" + strings.Repeat("../", depth+1) + link.Path + "/index.html"
 			}
 		}
 	}
