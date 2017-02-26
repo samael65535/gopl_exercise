@@ -59,19 +59,9 @@ func main() {
 	}
 
 }
-func IsCancel() bool {
-	select {
-	case <-cancel:
-		return true
-	default:
-		return false
-	}
-}
+
 func crawl(url string, curDepth int) LinkInfo {
 	fmt.Println(url)
-	if IsCancel() {
-		return LinkInfo{}
-	}
 	tokens <- struct{}{}
 	list, err := Extract(url)
 	info := LinkInfo{

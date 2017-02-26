@@ -1,15 +1,20 @@
-// 在fatchall中尝试使用长一些的参数列表，比如使用在alexa.com的上百万网站里排名靠前的。如果一个网站没有回应，程序将采取怎样的行为？
-
-// 如果一个网站长时间没有响应, 那么会把http err写入管道, 并跳过
-
 package main
+
+/*
+练习1.11:
+
+在fatchall中尝试使用长一些的参数列表，比如使用在alexa.com的上百万网站里排名靠前的。如果一个网站没有回应，程序将采取怎样的行为？
+
+如果一个网站长时间没有响应, 那么会把http err写入管道, 并跳过
+
+*/
 
 import (
 	"fmt"
-	"net/http"
-	"time"
 	"io"
 	"io/ioutil"
+	"net/http"
+	"time"
 )
 
 var urlList = []string{
@@ -18,7 +23,6 @@ var urlList = []string{
 	"http://www.qq.com/",
 	"http://www.sohu.com/",
 	"https://www.taobao.com/"}
-
 
 func main() {
 	start := time.Now()
@@ -39,8 +43,8 @@ func fetchAll(url string, ch chan<- string) {
 	start := time.Now()
 
 	// 在这可以设置超时时间
-	c := &http.Client {
-		Timeout: 10*time.Second,
+	c := &http.Client{
+		Timeout: 10 * time.Second,
 	}
 	resp, err := c.Get(url)
 
@@ -50,7 +54,7 @@ func fetchAll(url string, ch chan<- string) {
 	}
 
 	nbytes, err := io.Copy(ioutil.Discard, resp.Body)
-	resp.Body.Close();
+	resp.Body.Close()
 	if err != nil {
 		ch <- fmt.Sprintf("while reading %s: %v", url, err)
 		return
