@@ -34,6 +34,7 @@ func handleConn(c net.Conn) {
 			select {
 			case <-t.C:
 				fmt.Fprintln(c, "timeout!")
+				close(typing)
 				c.Close()
 				return
 			case <-typing:
