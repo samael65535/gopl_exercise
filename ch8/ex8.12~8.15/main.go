@@ -50,6 +50,7 @@ var (
 )
 
 func broadcaster() {
+	// ex8.15
 	clients := make(map[string]client) // all connected clients
 	for {
 		select {
@@ -58,7 +59,10 @@ func broadcaster() {
 			// clients' outgoing message channels.
 			fmt.Println(msg)
 			for _, cli := range clients {
-				cli.ch <- msg
+				select {
+				case cli.ch <- msg:
+					default:
+				}
 			}
 		case cli := <-entering:
 			// cli 是个内存地址
@@ -106,7 +110,6 @@ func handleConn(conn net.Conn) {
 				fmt.Println(dur.Seconds(), timeout.Seconds())
 				if dur.Seconds() > timeout.Seconds() {
 					closed <- struct{}{}
-					break
 				}
 			case <-closed: 
 				messages <- cli.NickName + " has left"
