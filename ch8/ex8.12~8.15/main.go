@@ -38,8 +38,9 @@ func main() {
 // ex8.12
 type client struct {
 	ch       chan<- string
-	Name     string
+	IP       string
 	LastTime time.Time
+	NickName string
 }
 
 var (
@@ -49,25 +50,29 @@ var (
 )
 
 func broadcaster() {
-	clients := make(map[client]bool) // all connected clients
+	clients := make(map[string]client) // all connected clients
 	for {
 		select {
 		case msg := <-messages:
 			// Broadcast incoming message to all
 			// clients' outgoing message channels.
-			for cli := range clients {
+			fmt.Println(msg)
+			for _, cli := range clients {
 				cli.ch <- msg
 			}
 		case cli := <-entering:
-			// cli 是个地址
-			clients[cli] = true
+			// cli 是个内存地址
+			ip := cli.IP
+			clients[ip] = cli
 			cli.ch <- "welcome: "
-			for cli := range clients {
-				cli.ch <- cli.Name
+			for _, cli := range clients {
+				cli.ch <- cli.NickName
 			}
 
 		case cli := <-leaving:
-			delete(clients, cli)
+			nick := cli.NickName
+			fmt.Println(nick + " has left")
+			delete(clients, cli.IP)
 			close(cli.ch)
 		}
 	}
@@ -75,39 +80,49 @@ func broadcaster() {
 
 func handleConn(conn net.Conn) {
 	ch := make(chan string) // outgoing client messages
+	closed := make(chan struct{})
 	go clientWriter(conn, ch)
 
 	who := conn.RemoteAddr().String()
-	cli := client{ch, who, time.Now()}
-	ch <- "You are " + who
-	messages <- who + " has arrived"
-	entering <- cli
+	cli := client{ch, who, time.Now(), "guest"}
 
+	// ex8.14
 	input := bufio.NewScanner(conn)
+	fmt.Fprintln(conn, "input nick name")
+	input.Scan()
+	cli.NickName = input.Text()
+	ch <- "You are " + cli.NickName
+	messages <- cli.NickName + " has arrived"
+	entering <- cli
 
 	go func() {
 		// ex8.13
-		timeout := 8.0 * time.Second
+		timeout := 60.0 * time.Second
 		ticker := time.NewTicker(timeout)
 		for {
-			<-ticker.C
-			dur := time.Now().Sub(cli.LastTime)
-			fmt.Println(dur.Seconds(), timeout.Seconds())
-			if dur.Seconds() > timeout.Seconds(){
+			select {
+			case <-ticker.C:
+				dur := time.Now().Sub(cli.LastTime)
+				fmt.Println(dur.Seconds(), timeout.Seconds())
+				if dur.Seconds() > timeout.Seconds() {
+					closed <- struct{}{}
+					break
+				}
+			case <-closed: 
+				messages <- cli.NickName + " has left"
+				leaving <- cli
 				conn.Close()
 				break;
 			}
 		}
+
 	}()
+
 	for input.Scan() {
-		messages <- who + ": " + input.Text()
+		messages <- cli.NickName + ": " + input.Text()
 		cli.LastTime = time.Now()
 	}
-
-	// NOTE: ignoring potential errors from input.Err()
-	leaving <- cli
-	messages <- who + " has left"
-	conn.Close()
+	closed <- struct{}{}
 }
 
 func clientWriter(conn net.Conn, ch <-chan string) {
