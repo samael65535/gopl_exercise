@@ -9,35 +9,51 @@ import (
 练习 9.5:
 写一个有两个goroutine的程序，两个goroutine会向两个无buffer channel反复地发送ping-pong消息。这样的程序每秒可以支持多少次通信？
 */
-func ping(in, out chan string) {
+var done = make(chan struct{}, 2)
+
+func ping(in, out chan uint64) {
 	for {
-		//select {
-		s := <-in
-		fmt.Println(s)
-		out <- "pong"
-//		default:
-//			fmt.Println("ping")
-//		}
+		select {
+		case s := <-in:
+			// fmt.Println("ping")
+			out <- s+1
+		case <-done:
+			break;
+		}
 	}
 }
 
-func pong(out, in chan string) {
+func pong(out, in chan uint64) {
 	for {
-		s:= <-out
-		fmt.Println(s)
-		in <- "ping"
+		select {
+		case s:= <-out:
+			// fmt.Println("pong")
+			in <- s
+		case <- done:
+			break;
+		}
 	}
 }
 
 func main() {
-	in := make(chan string)
-	out := make(chan string)
-	done := make(chan struct{})
+	in := make(chan uint64)
+	out := make(chan uint64)
+
 	go ping(in, out)
 	go pong(out, in)
-	time.Sleep(2)
-	in <- "ping"
-	fmt.Println("pong")
-	_ =fmt.Print
-	<-done
+	ticker := time.NewTicker(1 * time.Second)
+	in <- 0
+	for {
+		select {
+		case <-ticker.C:
+			fmt.Println("total: ", <-in)
+			in <- 0
+
+		}
+	}
+	// done<-struct{}{}
+	// done<-struct{}{}
+	// close(done)
+	// close(in)
+	// close(out)
 }
