@@ -5,6 +5,9 @@ import (
 	_ "archive/zip"
 )
 
+func init() {
+
+}
 func main() {
 
 }
